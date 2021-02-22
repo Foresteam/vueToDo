@@ -3,7 +3,7 @@ node_modules
 /dist
 
 # poor db
-todos.json
+/todos.json
 
 # local env files
 .env.local
