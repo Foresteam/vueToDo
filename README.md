@@ -8,7 +8,7 @@ npm install
 ### Compiles and hot-reloads for development
 Backend:
 ```
-node index.js
+npx nodemon index.js
 ```
 Frontend:
 ```

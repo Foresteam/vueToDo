@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressWs = require('express-ws');
-const fs = require('fs');
 const et = require('./core/etemporal'); // Temporal (Enternal) solution
 
 const db = new et.DB('todos.json');
