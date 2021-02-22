@@ -2,61 +2,17 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const expressWs = require('express-ws');
 const fs = require('fs');
+const et = require('./core/etemporal'); // Temporal (Enternal) solution
+
+const db = new et.DB('todos.json');
+const sm = new et.SocketMaster();
 
 const app = express();
 expressWs(app);
 
-class DB {
-    constructor(file) {
-        this.path = file;
-        if (fs.statSync(file))
-            this.self = JSON.parse(fs.readFileSync(file, 'utf-8'));
-        else
-            this.self = [];
-    }
-    save() {
-        fs.writeFileSync(this.path, JSON.stringify(this.self, null, 4), 'utf-8');
-    }
-}
-const db = new DB('todos.json');
-
-class SocketMaster {
-    constructor() {
-        this.slaves = [];
-        this.nslave = 0;
-    }
-    broadcast(msg) {
-        if (typeof msg == 'object')
-            msg = JSON.stringify(msg);
-        else if (typeof msg != 'string')
-            msg = String(msg);
-
-        for (let slave of this.slaves)
-            if (slave.alive)
-                slave.send(msg);
-    }
-    punish() {
-        let bastards = [];
-        for (let islave in this.slaves)
-            if (!this.slaves[islave].alive)
-                bastards.push(islave);
-        for (let ibastard of bastards.reverse())
-            this.slaves.splice(ibastard, 1);
-    }
-    enslave(slave) {
-        this.punish();
-        slave.id = this.nslave;
-        slave.alive = true;
-        slave.onclose = () => slave.alive = false;
-        this.nslave++;
-        this.slaves.push(slave);
-    }
-}
-const sm = new SocketMaster();
-
 app.use(bodyParser.json());
 app.use(express.static('./dist'));
-app.use((rq, rs, next) => {
+app.use((rq, rs, next) => { // for debugging. Release build doen't need this
     rs.set('Access-Control-Allow-Origin', '*');
     rs.set('Access-Control-Allow-Headers', 'Content-Type');
     next();
@@ -103,9 +59,9 @@ app.post('/actions/:action', (rq, rs) => {
     }
 });
 
-app.ws('/', (ws, rq) => {
-    sm.enslave(ws);
-    //sending entire todos
+app.ws('/', (ws, rq) => { //accepting sockets
+    sm.enslave(ws); // enslave this sweet one
+    // sending entire todos
     ws.send(JSON.stringify({
         action: 'loadTodos',
         data: db.self

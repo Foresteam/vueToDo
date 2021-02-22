@@ -16,7 +16,7 @@ import Loading from '@/components/Loading';
 const proto = 'http';
 const server = '://dfmfd.ddns.net:1337/';
 
-const xhttp = ({url, method, params}) => new Promise((resolve, reject) => {
+const xhttp = ({url, method, params}) => new Promise((resolve, reject) => { // my ajax replacement. Mb i didn't actually need this. Idk
 	method ||= 'POST';
 	params ||= {};
 
@@ -30,13 +30,13 @@ const xhttp = ({url, method, params}) => new Promise((resolve, reject) => {
 	xhr.send(JSON.stringify(params));
 });
 
-function ToDo(text, id, completed) {
+function ToDo(text, id, completed) { // weird shit. Don't think it's needed now, but i'm too lazy to remove it
 	this.text = text;
 	this.id = id;
 	this.completed = completed || false;
 }
 
-let ws;
+let ws; // declaring websocket
 
 export default {
 	name: 'App',
@@ -72,6 +72,7 @@ export default {
 		applyFilter(value) {
 			this.filter = value;
 		},
+		// ws_ methods are to be called by the server through ws. They apply the changes we (or smb else) make
 		ws_loadTodos(todos) {
 			this.todos = todos.map(e => new ToDo(...Object.values(e)));
 		},
@@ -92,10 +93,11 @@ export default {
 		Loading
 	},
 	async mounted() {
+		// i thought sockets would be better as they add "cool dynamics"
 		// this.todos = (await xhttp({ url: proto + server + 'actions/getTodos' })).map(e => new ToDo(...Object.values(e)));
 
-		ws = new WebSocket('ws' + server + '');
-		ws.onopen = () => ws.send('Fuck y!');
+		ws = new WebSocket('ws' + server + ''); // there could be a path
+		//ws.onopen = () => ws.send('Fuck y!'); // very important line
 		ws.addEventListener('message', ({data: msg}) => {
 			this.loading = true;
 			let json = JSON.parse(msg);
