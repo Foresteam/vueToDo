@@ -24,4 +24,4 @@ Run the server:
 ```
 node index.js
 ```
-Mb that's not a good idea to do it "this" way, but for the first time i think i can:)
+Mb that's not a good idea to do it "this" way, but for the first time i think i can :)
