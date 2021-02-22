@@ -1,4 +1,4 @@
-# vuetest
+# My VUE ToDo app
 
 ## Project setup
 ```
@@ -6,19 +6,22 @@ npm install
 ```
 
 ### Compiles and hot-reloads for development
+Backend:
+```
+node index.js
+```
+Frontend:
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Production running
+Build VUE app:
 ```
 npm run build
 ```
-
-### Lints and fixes files
+Run the server:
 ```
-npm run lint
+node index.js
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Mb that's not a good idea to do it "this" way, but for the first time i think i can :)
