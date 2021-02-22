@@ -16,5 +16,7 @@ npm run serve
 ### Production running
 ```
 npm run build
+```
+```
 node index.js
 ```
