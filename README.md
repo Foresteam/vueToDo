@@ -1,4 +1,4 @@
-# vuetest
+# My VUE ToDo app
 
 ## Project setup
 ```
