@@ -53,9 +53,9 @@ export default {
 		loading: false
 	}),
 	methods: {
-		addTodo(text, id) {
-			let lastId = (this.todos[this.todos.length - 1] || {}).id || -1;
-			let ntodo = new ToDo(text, id || lastId + 1);
+		addTodo(text) {
+			let lastId = (this.todos[this.todos.length - 1] || {}).id + 1 || 0;
+			let ntodo = new ToDo(text, lastId);
 			xhttp({
 				url: proto + server + 'actions/addTodo',
 				params: {
